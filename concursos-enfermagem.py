@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import os
 from datetime import date
-import smtplib, ssl
+import smtplib
+import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from tabulate import tabulate
@@ -30,12 +31,13 @@ def is_eligible(post):
         tags = set(map((lambda a: a.text), tags_span.find_all("a")))
         return set(["Concurso", "Enfermeiro"]) <= tags
     return False
-    #return set(["Concurso", "Enfermeiro"]) <= set(map((lambda a : a.text), post.find("span", {"class": "tags-links"}).find_all("a")))
+    #return set(["Concurso", "Enfermeiro"]) <= set(map((lambda a : a.text),
+    #post.find("span", {"class": "tags-links"}).find_all("a")))
 
-    
+
 # Notify of open "concursos" via email
 def send_email(posts):
-    
+
     message = MIMEMultipart("alternative")
     message["Subject"] = "Novos Concursos de Enfermagem | " + str(date.today().strftime("%d-%m-%Y"))
     message["From"] = ENV_FROM
@@ -68,9 +70,9 @@ def send_email(posts):
     </style>
     """
     
-    posts_table= []
+    posts_table = []
     for id in posts:
-       posts_table.append([posts[id]["title"],posts[id]["href"]])
+        posts_table.append([posts[id]["title"],posts[id]["href"]])
     posts_html_table = tabulate(posts_table, headers=["Concurso", "Link"],tablefmt='html')\
         .replace("<table>",'''<table class="gmail-table">''')
 
@@ -126,7 +128,7 @@ for post in soup.find_all("article"):
     post_title = post.find("h1").text
     post_href = post.find("a").get("href")
     
-    posts_dict[post_id] = { "title" : post_title, "href" : post_href}
+    posts_dict[post_id] = {"title": post_title, "href": post_href}
 
 
 # Notify
