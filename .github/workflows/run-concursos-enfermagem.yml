@@ -4,6 +4,7 @@
 name: run concursos-enfermagem
 
 on:
+  workflow_dispatch:
   schedule:
   - cron: "30 10 * * *"
 
