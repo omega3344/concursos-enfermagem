@@ -4,10 +4,8 @@
 name: run concursos-enfermagem
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  schedule:
+  - cron: "30 10 * * *"
 
 permissions:
   contents: write
@@ -40,3 +38,8 @@ jobs:
         FROM: ${{ secrets.FROM }}
         TO: ${{ secrets.TO }}
       run: python concursos-enfermagem.py
+    - name: Commit and push changes
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Update output file"
+        branch: "master"
